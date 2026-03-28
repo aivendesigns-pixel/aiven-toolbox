@@ -13,15 +13,17 @@
     }
 
     :root {
-      --bg: #ffffff;
-      --header-bg: #ffffff;
+      --bg: #fafafa;
+      --header-bg: rgba(250, 250, 250, 0.8);
       --text: #1d1d1f;
       --text-secondary: #86868b;
       --card-bg: #ffffff;
-      --card-border: rgba(0, 0, 0, 0.08);
-      --card-border-hover: rgba(0, 0, 0, 0.18);
-      --divider: rgba(0, 0, 0, 0.1);
-      --arrow-color: #86868b;
+      --card-border: rgba(0, 0, 0, 0.06);
+      --card-border-hover: rgba(0, 0, 0, 0.15);
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --divider: rgba(0, 0, 0, 0.08);
+      --arrow-color: #c7c7cc;
       --arrow-hover: #1d1d1f;
       --tag-finance-bg: #FFF3CD;
       --tag-finance-text: #7A5800;
@@ -29,19 +31,23 @@
       --tag-social-text: #065F46;
       --tag-work-bg: #EDE9FE;
       --tag-work-text: #4C1D95;
+      --esc-bg: rgba(0, 0, 0, 0.06);
+      --esc-text: #86868b;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #000000;
-        --header-bg: #000000;
+        --header-bg: rgba(0, 0, 0, 0.8);
         --text: #f5f5f7;
         --text-secondary: #86868b;
         --card-bg: #1C1C1E;
-        --card-border: rgba(255, 255, 255, 0.1);
-        --card-border-hover: rgba(255, 255, 255, 0.25);
-        --divider: rgba(255, 255, 255, 0.1);
-        --arrow-color: #86868b;
+        --card-border: rgba(255, 255, 255, 0.08);
+        --card-border-hover: rgba(255, 255, 255, 0.2);
+        --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+        --divider: rgba(255, 255, 255, 0.08);
+        --arrow-color: #48484a;
         --arrow-hover: #f5f5f7;
         --tag-finance-bg: #3A2E00;
         --tag-finance-text: #FFC940;
@@ -49,6 +55,8 @@
         --tag-social-text: #6EE7A0;
         --tag-work-bg: #1E1040;
         --tag-work-text: #C4B5FD;
+        --esc-bg: rgba(255, 255, 255, 0.1);
+        --esc-text: #86868b;
       }
     }
 
@@ -79,7 +87,20 @@
       z-index: 100;
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
       gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .header-logo {
@@ -112,9 +133,10 @@
       cursor: pointer;
       border: none;
       background: none;
-      padding: 6px 8px;
+      padding: 6px 10px 6px 6px;
       border-radius: 8px;
       transition: background 0.15s;
+      white-space: nowrap;
     }
 
     .header-back:hover {
@@ -122,28 +144,54 @@
     }
 
     .header-back svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
     }
 
-    /* App title in header */
-    .header-app-info {
+    /* App title in header - centered */
+    .header-center {
       display: none;
       align-items: center;
       gap: 8px;
-      margin-left: auto;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    .header-app-info img {
+    .header-center img {
       width: 22px;
       height: 22px;
-      border-radius: 5px;
+      border-radius: 6px;
     }
 
-    .header-app-info span {
-      font-size: 13px;
+    .header-center span {
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
+    }
+
+    /* ESC hint */
+    .esc-hint {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--esc-text);
+    }
+
+    .esc-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      font-family: inherit;
+      background: var(--esc-bg);
+      border-radius: 4px;
+      line-height: 1;
+      min-width: 20px;
+      letter-spacing: 0.02em;
     }
 
     /* Open external link button */
@@ -173,8 +221,8 @@
     }
 
     .header-external svg {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
     }
 
     /* Content area */
@@ -188,12 +236,12 @@
     .home-view {
       height: 100%;
       overflow-y: auto;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
     .home-view.hidden {
       opacity: 0;
-      transform: scale(0.97);
+      transform: scale(0.96);
       pointer-events: none;
       position: absolute;
       inset: 0;
@@ -202,12 +250,12 @@
     .home-inner {
       max-width: 800px;
       margin: 0 auto;
-      padding: 48px 24px 64px;
+      padding: 56px 24px 80px;
     }
 
     /* Title section */
     .title-section {
-      margin-bottom: 48px;
+      margin-bottom: 52px;
     }
 
     .title-label {
@@ -216,20 +264,21 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-secondary);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .title-main {
-      font-size: 48px;
+      font-size: 52px;
       font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 8px;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      margin-bottom: 10px;
     }
 
     .title-sub {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-secondary);
+      font-weight: 400;
     }
 
     /* Cards grid */
@@ -237,36 +286,35 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
+      margin-bottom: 56px;
     }
 
     .card {
       position: relative;
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      padding: 22px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 18px;
       text-decoration: none;
       color: var(--text);
       cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1),
+                  border-color 0.22s ease,
+                  box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1);
     }
 
     .card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       border-color: var(--card-border-hover);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      box-shadow: var(--card-shadow-hover);
     }
 
     .card:active {
-      transform: scale(0.98);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .card:hover {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      }
+      transform: scale(0.97) translateY(0);
+      transition-duration: 0.08s;
     }
 
     .card-icon {
@@ -274,7 +322,7 @@
       height: 52px;
       border-radius: 13px;
       object-fit: cover;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .card-title {
@@ -287,16 +335,24 @@
     .card-desc {
       font-size: 13px;
       color: var(--text-secondary);
-      line-height: 1.45;
-      margin-bottom: 18px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .card-tag {
       display: inline-block;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
       padding: 4px 10px;
       border-radius: 20px;
+      letter-spacing: 0.01em;
     }
 
     .tag-finance {
@@ -315,12 +371,9 @@
     }
 
     .card-arrow {
-      position: absolute;
-      bottom: 18px;
-      right: 18px;
-      font-size: 14px;
+      font-size: 15px;
       color: var(--arrow-color);
-      transition: transform 0.18s ease, color 0.18s ease;
+      transition: transform 0.22s ease, color 0.22s ease;
     }
 
     .card:hover .card-arrow {
@@ -352,8 +405,10 @@
       position: absolute;
       inset: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 16px;
       background: var(--bg);
       transition: opacity 0.3s ease;
     }
@@ -364,12 +419,17 @@
     }
 
     .spinner {
-      width: 24px;
-      height: 24px;
-      border: 2.5px solid var(--divider);
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--divider);
       border-top-color: var(--text-secondary);
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.65s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 13px;
+      color: var(--text-secondary);
     }
 
     @keyframes spin {
@@ -413,8 +473,24 @@
     }
 
     @media (max-width: 480px) {
+      .home-inner {
+        padding: 36px 20px 60px;
+      }
+
       .title-main {
         font-size: 36px;
+      }
+
+      .title-section {
+        margin-bottom: 36px;
+      }
+
+      .cards {
+        gap: 12px;
+      }
+
+      .header-center {
+        display: none !important;
       }
 
       .footer-content {
@@ -422,35 +498,48 @@
         gap: 6px;
         align-items: flex-start;
       }
+
+      .esc-hint {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <button class="header-back" id="backBtn" onclick="goHome()">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 3L5 8l5 5"/>
-      </svg>
-      Toolbox
-    </button>
+    <div class="header-left">
+      <button class="header-back" id="backBtn" onclick="goHome()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 3L5 8l5 5"/>
+        </svg>
+        Toolbox
+      </button>
 
-    <div class="header-logo" id="headerLogo" onclick="goHome()">
-      <img src="icons/toolbox.png" alt="Toolbox">
-      <span>Toolbox</span>
+      <div class="header-logo" id="headerLogo" onclick="goHome()">
+        <img src="icons/toolbox.png" alt="Toolbox">
+        <span>Toolbox</span>
+      </div>
     </div>
 
-    <div class="header-app-info" id="headerAppInfo">
+    <div class="header-center" id="headerCenter">
       <img id="headerAppIcon" src="" alt="">
       <span id="headerAppName"></span>
     </div>
 
-    <button class="header-external" id="externalBtn" onclick="openExternal()" title="Open in new tab">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 3H3.5A1.5 1.5 0 002 4.5v8A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V9"/>
-        <path d="M9 2h5v5"/>
-        <path d="M14 2L7 9"/>
-      </svg>
-    </button>
+    <div class="header-right">
+      <div class="esc-hint" id="escHint">
+        <kbd class="esc-key">esc</kbd>
+        <span>返回</span>
+      </div>
+
+      <button class="header-external" id="externalBtn" onclick="openExternal()" title="在新标签页中打开">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3H3.5A1.5 1.5 0 002 4.5v8A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V9"/>
+          <path d="M9 2h5v5"/>
+          <path d="M14 2L7 9"/>
+        </svg>
+      </button>
+    </div>
   </header>
 
   <div class="content">
@@ -467,24 +556,30 @@
             <img class="card-icon" src="icons/cyberfortunegod.png" alt="赛博财神爷">
             <div class="card-title">赛博财神爷</div>
             <div class="card-desc">AI 智能记账，加拿大生活场景，夫妻共用</div>
-            <span class="card-tag tag-finance">财务管理</span>
-            <span class="card-arrow">&#8599;</span>
+            <div class="card-bottom">
+              <span class="card-tag tag-finance">财务管理</span>
+              <span class="card-arrow">&#8599;</span>
+            </div>
           </div>
 
           <div class="card" onclick="openApp('postagent', 'https://post-agent-rho.vercel.app/', 'Post Agent', 'icons/postagent.png')">
             <img class="card-icon" src="icons/postagent.png" alt="Post Agent">
             <div class="card-title">Post Agent</div>
             <div class="card-desc">社媒内容批量生成，自动排程，多平台发布</div>
-            <span class="card-tag tag-social">社交媒体</span>
-            <span class="card-arrow">&#8599;</span>
+            <div class="card-bottom">
+              <span class="card-tag tag-social">社交媒体</span>
+              <span class="card-arrow">&#8599;</span>
+            </div>
           </div>
 
           <div class="card" onclick="openApp('soloceo', 'https://soloceo.github.io/solo-ceo/', 'Solo CEO', 'icons/soloceo.png')">
             <img class="card-icon" src="icons/soloceo.png" alt="Solo CEO">
             <div class="card-title">Solo CEO</div>
             <div class="card-desc">独立创业者工作台，任务、客户、专注一体</div>
-            <span class="card-tag tag-work">工作管理</span>
-            <span class="card-arrow">&#8599;</span>
+            <div class="card-bottom">
+              <span class="card-tag tag-work">工作管理</span>
+              <span class="card-arrow">&#8599;</span>
+            </div>
           </div>
         </div>
 
@@ -504,23 +599,26 @@
     <div class="app-view" id="appView">
       <div class="app-loading" id="appLoading">
         <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Loading...</div>
       </div>
       <iframe id="appFrame" src="about:blank"></iframe>
     </div>
   </div>
 
   <script>
-    const apps = {};
     let currentUrl = '';
+    let isAppOpen = false;
 
     function openApp(id, url, name, icon) {
       currentUrl = url;
+      isAppOpen = true;
 
       // Update header
       document.getElementById('headerLogo').style.display = 'none';
       document.getElementById('backBtn').style.display = 'flex';
-      document.getElementById('headerAppInfo').style.display = 'flex';
+      document.getElementById('headerCenter').style.display = 'flex';
       document.getElementById('externalBtn').style.display = 'flex';
+      document.getElementById('escHint').style.display = 'flex';
       document.getElementById('headerAppIcon').src = icon;
       document.getElementById('headerAppName').textContent = name;
 
@@ -531,6 +629,7 @@
       // Show loading
       const loading = document.getElementById('appLoading');
       loading.classList.remove('hidden');
+      document.getElementById('loadingText').textContent = name;
 
       // Load iframe
       const frame = document.getElementById('appFrame');
@@ -547,11 +646,16 @@
     }
 
     function goHome() {
+      if (!isAppOpen) return;
+      isAppOpen = false;
+      currentUrl = '';
+
       // Update header
       document.getElementById('headerLogo').style.display = 'flex';
       document.getElementById('backBtn').style.display = 'none';
-      document.getElementById('headerAppInfo').style.display = 'none';
+      document.getElementById('headerCenter').style.display = 'none';
       document.getElementById('externalBtn').style.display = 'none';
+      document.getElementById('escHint').style.display = 'none';
 
       // Show home view
       document.getElementById('homeView').classList.remove('hidden');
@@ -559,10 +663,9 @@
 
       // Unload iframe
       document.getElementById('appFrame').src = 'about:blank';
-      currentUrl = '';
 
       // Update title
-      document.title = 'Toolbox — Aiven\'s Workspace';
+      document.title = 'Toolbox \u2014 Aiven\'s Workspace';
 
       // Update URL
       if (location.hash) {
@@ -576,11 +679,20 @@
       }
     }
 
+    // ESC key to go home
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isAppOpen) {
+        e.preventDefault();
+        goHome();
+      }
+    });
+
     // Handle browser back/forward
     window.addEventListener('popstate', function(e) {
       if (e.state && e.state.app) {
         openApp(e.state.app, e.state.url, e.state.name, e.state.icon);
       } else {
+        isAppOpen = true;
         goHome();
       }
     });
