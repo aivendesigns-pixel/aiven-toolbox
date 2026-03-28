@@ -460,19 +460,6 @@
       background: var(--bg);
     }
 
-    /* Focus overlay - catches ESC when iframe has focus */
-    .focus-overlay {
-      display: none;
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      cursor: pointer;
-    }
-
-    .app-view.active .focus-overlay.listening {
-      display: block;
-    }
-
     /* Loading state */
     .app-loading {
       position: absolute;
@@ -640,7 +627,6 @@
     </div>
 
     <div class="app-view" id="appView">
-      <div class="focus-overlay" id="focusOverlay"></div>
       <div class="app-loading" id="appLoading">
         <div class="spinner"></div>
         <div class="loading-text" id="loadingText">Loading...</div>
@@ -884,7 +870,6 @@
 
       document.getElementById('homeView').classList.remove('hidden');
       document.getElementById('appView').classList.remove('active');
-      document.getElementById('focusOverlay').classList.remove('listening');
       document.getElementById('appFrame').src = 'about:blank';
 
       document.title = 'Toolbox \u2014 Aiven\'s Workspace';
@@ -900,33 +885,19 @@
       if (e.key === 'Escape' && isAppOpen) { e.preventDefault(); goHome(); }
     });
 
-    // When iframe steals focus, show an invisible overlay so the NEXT
-    // ESC press is caught by the parent document.
-    // The overlay disappears on click so the user can interact with the iframe again.
-    var overlay = document.getElementById('focusOverlay');
-
-    window.addEventListener('blur', function() {
-      if (!isAppOpen) return;
-      // Focus left the main window → likely entered the iframe
-      overlay.classList.add('listening');
+    // Fix: when iframe steals focus, parent can't catch keydown.
+    // Solution: any mousemove on parent document (which only fires
+    // when mouse is OUTSIDE the cross-origin iframe) refocuses the
+    // parent window so ESC works from the header area.
+    document.addEventListener('mousemove', function() {
+      if (isAppOpen && !document.hasFocus()) {
+        window.focus();
+      }
     });
 
-    overlay.addEventListener('mousedown', function() {
-      // User clicked the overlay → hide it so click passes through to iframe
-      overlay.classList.remove('listening');
-      // Re-focus the iframe by letting the click through
-      setTimeout(function() {
-        document.getElementById('appFrame').focus();
-      }, 0);
-    });
-
-    // Also hide overlay when we regain focus via tab/click on header
-    window.addEventListener('focus', function() {
-      // Small delay to let keydown fire first if ESC was pressed
-      setTimeout(function() {
-        if (!overlay.classList.contains('listening')) return;
-        // If focus is back on parent, we can remove overlay
-      }, 100);
+    // Also refocus on header hover/click for reliability
+    document.querySelector('header').addEventListener('mouseenter', function() {
+      if (isAppOpen) window.focus();
     });
 
     window.addEventListener('popstate', function(e) {
