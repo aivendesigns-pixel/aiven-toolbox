@@ -52,33 +52,41 @@
       }
     }
 
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Header */
     header {
       height: 52px;
+      min-height: 52px;
       display: flex;
       align-items: center;
-      padding: 0 24px;
+      padding: 0 16px;
       background: var(--header-bg);
       border-bottom: 0.5px solid var(--divider);
-      position: sticky;
-      top: 0;
       z-index: 100;
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
+      gap: 12px;
     }
 
     .header-logo {
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .header-logo img {
@@ -93,8 +101,105 @@
       color: var(--text);
     }
 
-    /* Main */
-    main {
+    /* Back button */
+    .header-back {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #007AFF;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+
+    .header-back:hover {
+      background: rgba(0, 122, 255, 0.08);
+    }
+
+    .header-back svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* App title in header */
+    .header-app-info {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .header-app-info img {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+    }
+
+    .header-app-info span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Open external link button */
+    .header-external {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .header-external:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header-external:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .header-external svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Home view */
+    .home-view {
+      height: 100%;
+      overflow-y: auto;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .home-view.hidden {
+      opacity: 0;
+      transform: scale(0.97);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+
+    .home-inner {
       max-width: 800px;
       margin: 0 auto;
       padding: 48px 24px 64px;
@@ -144,6 +249,7 @@
       border-radius: 16px;
       text-decoration: none;
       color: var(--text);
+      cursor: pointer;
       transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
@@ -212,7 +318,7 @@
       position: absolute;
       bottom: 18px;
       right: 18px;
-      font-size: 16px;
+      font-size: 14px;
       color: var(--arrow-color);
       transition: transform 0.18s ease, color 0.18s ease;
     }
@@ -222,11 +328,60 @@
       color: var(--arrow-hover);
     }
 
+    /* App view (iframe) */
+    .app-view {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+    }
+
+    .app-view.active {
+      display: flex;
+    }
+
+    .app-view iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: var(--bg);
+    }
+
+    /* Loading state */
+    .app-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity 0.3s ease;
+    }
+
+    .app-loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid var(--divider);
+      border-top-color: var(--text-secondary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     /* Footer */
-    footer {
+    .footer-section {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 24px 48px;
+      width: 100%;
     }
 
     .footer-divider {
@@ -272,55 +427,179 @@
 </head>
 <body>
   <header>
-    <div class="header-logo">
+    <button class="header-back" id="backBtn" onclick="goHome()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Toolbox
+    </button>
+
+    <div class="header-logo" id="headerLogo" onclick="goHome()">
       <img src="icons/toolbox.png" alt="Toolbox">
       <span>Toolbox</span>
     </div>
+
+    <div class="header-app-info" id="headerAppInfo">
+      <img id="headerAppIcon" src="" alt="">
+      <span id="headerAppName"></span>
+    </div>
+
+    <button class="header-external" id="externalBtn" onclick="openExternal()" title="Open in new tab">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 3H3.5A1.5 1.5 0 002 4.5v8A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V9"/>
+        <path d="M9 2h5v5"/>
+        <path d="M14 2L7 9"/>
+      </svg>
+    </button>
   </header>
 
-  <main>
-    <div class="title-section">
-      <p class="title-label">Aiven's Workspace</p>
-      <h1 class="title-main">Toolbox</h1>
-      <p class="title-sub">3 apps, one place.</p>
-    </div>
+  <div class="content">
+    <div class="home-view" id="homeView">
+      <div class="home-inner">
+        <div class="title-section">
+          <p class="title-label">Aiven's Workspace</p>
+          <h1 class="title-main">Toolbox</h1>
+          <p class="title-sub">3 apps, one place.</p>
+        </div>
 
-    <div class="cards">
-      <a class="card" href="https://cyberfortunegod.vercel.app/" target="_blank" rel="noopener">
-        <img class="card-icon" src="icons/cyberfortunegod.png" alt="赛博财神爷">
-        <div class="card-title">赛博财神爷</div>
-        <div class="card-desc">AI 智能记账，加拿大生活场景，夫妻共用</div>
-        <span class="card-tag tag-finance">财务管理</span>
-        <span class="card-arrow">&#8599;</span>
-      </a>
+        <div class="cards">
+          <div class="card" onclick="openApp('cyberfortunegod', 'https://cyberfortunegod.vercel.app/', '赛博财神爷', 'icons/cyberfortunegod.png')">
+            <img class="card-icon" src="icons/cyberfortunegod.png" alt="赛博财神爷">
+            <div class="card-title">赛博财神爷</div>
+            <div class="card-desc">AI 智能记账，加拿大生活场景，夫妻共用</div>
+            <span class="card-tag tag-finance">财务管理</span>
+            <span class="card-arrow">&#8599;</span>
+          </div>
 
-      <a class="card" href="https://post-agent-rho.vercel.app/" target="_blank" rel="noopener">
-        <img class="card-icon" src="icons/postagent.png" alt="Post Agent">
-        <div class="card-title">Post Agent</div>
-        <div class="card-desc">社媒内容批量生成，自动排程，多平台发布</div>
-        <span class="card-tag tag-social">社交媒体</span>
-        <span class="card-arrow">&#8599;</span>
-      </a>
+          <div class="card" onclick="openApp('postagent', 'https://post-agent-rho.vercel.app/', 'Post Agent', 'icons/postagent.png')">
+            <img class="card-icon" src="icons/postagent.png" alt="Post Agent">
+            <div class="card-title">Post Agent</div>
+            <div class="card-desc">社媒内容批量生成，自动排程，多平台发布</div>
+            <span class="card-tag tag-social">社交媒体</span>
+            <span class="card-arrow">&#8599;</span>
+          </div>
 
-      <a class="card" href="https://soloceo.github.io/solo-ceo/" target="_blank" rel="noopener">
-        <img class="card-icon" src="icons/soloceo.png" alt="Solo CEO">
-        <div class="card-title">Solo CEO</div>
-        <div class="card-desc">独立创业者工作台，任务、客户、专注一体</div>
-        <span class="card-tag tag-work">工作管理</span>
-        <span class="card-arrow">&#8599;</span>
-      </a>
-    </div>
-  </main>
+          <div class="card" onclick="openApp('soloceo', 'https://soloceo.github.io/solo-ceo/', 'Solo CEO', 'icons/soloceo.png')">
+            <img class="card-icon" src="icons/soloceo.png" alt="Solo CEO">
+            <div class="card-title">Solo CEO</div>
+            <div class="card-desc">独立创业者工作台，任务、客户、专注一体</div>
+            <span class="card-tag tag-work">工作管理</span>
+            <span class="card-arrow">&#8599;</span>
+          </div>
+        </div>
 
-  <footer>
-    <div class="footer-divider"></div>
-    <div class="footer-content">
-      <div class="footer-status">
-        <span class="status-dot"></span>
-        <span>3 tools running</span>
+        <div class="footer-section">
+          <div class="footer-divider"></div>
+          <div class="footer-content">
+            <div class="footer-status">
+              <span class="status-dot"></span>
+              <span>3 tools running</span>
+            </div>
+            <div>各 app 独立部署 · 更新自动同步</div>
+          </div>
+        </div>
       </div>
-      <div>各 app 独立部署 · 更新自动同步</div>
     </div>
-  </footer>
+
+    <div class="app-view" id="appView">
+      <div class="app-loading" id="appLoading">
+        <div class="spinner"></div>
+      </div>
+      <iframe id="appFrame" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const apps = {};
+    let currentUrl = '';
+
+    function openApp(id, url, name, icon) {
+      currentUrl = url;
+
+      // Update header
+      document.getElementById('headerLogo').style.display = 'none';
+      document.getElementById('backBtn').style.display = 'flex';
+      document.getElementById('headerAppInfo').style.display = 'flex';
+      document.getElementById('externalBtn').style.display = 'flex';
+      document.getElementById('headerAppIcon').src = icon;
+      document.getElementById('headerAppName').textContent = name;
+
+      // Show app view
+      document.getElementById('homeView').classList.add('hidden');
+      document.getElementById('appView').classList.add('active');
+
+      // Show loading
+      const loading = document.getElementById('appLoading');
+      loading.classList.remove('hidden');
+
+      // Load iframe
+      const frame = document.getElementById('appFrame');
+      frame.src = url;
+      frame.onload = function() {
+        loading.classList.add('hidden');
+      };
+
+      // Update title
+      document.title = name + ' — Toolbox';
+
+      // Push state for browser back
+      history.pushState({ app: id, url, name, icon }, '', '#' + id);
+    }
+
+    function goHome() {
+      // Update header
+      document.getElementById('headerLogo').style.display = 'flex';
+      document.getElementById('backBtn').style.display = 'none';
+      document.getElementById('headerAppInfo').style.display = 'none';
+      document.getElementById('externalBtn').style.display = 'none';
+
+      // Show home view
+      document.getElementById('homeView').classList.remove('hidden');
+      document.getElementById('appView').classList.remove('active');
+
+      // Unload iframe
+      document.getElementById('appFrame').src = 'about:blank';
+      currentUrl = '';
+
+      // Update title
+      document.title = 'Toolbox — Aiven\'s Workspace';
+
+      // Update URL
+      if (location.hash) {
+        history.pushState({}, '', location.pathname);
+      }
+    }
+
+    function openExternal() {
+      if (currentUrl) {
+        window.open(currentUrl, '_blank');
+      }
+    }
+
+    // Handle browser back/forward
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.app) {
+        openApp(e.state.app, e.state.url, e.state.name, e.state.icon);
+      } else {
+        goHome();
+      }
+    });
+
+    // Handle initial hash on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      const hash = location.hash.slice(1);
+      if (hash) {
+        const appMap = {
+          cyberfortunegod: { url: 'https://cyberfortunegod.vercel.app/', name: '赛博财神爷', icon: 'icons/cyberfortunegod.png' },
+          postagent: { url: 'https://post-agent-rho.vercel.app/', name: 'Post Agent', icon: 'icons/postagent.png' },
+          soloceo: { url: 'https://soloceo.github.io/solo-ceo/', name: 'Solo CEO', icon: 'icons/soloceo.png' }
+        };
+        if (appMap[hash]) {
+          const app = appMap[hash];
+          openApp(hash, app.url, app.name, app.icon);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
