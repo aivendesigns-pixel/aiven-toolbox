@@ -381,6 +381,66 @@
       color: var(--arrow-hover);
     }
 
+    /* Drag and drop */
+    .card[draggable="true"] {
+      cursor: grab;
+      user-select: none;
+    }
+
+    .card.dragging {
+      opacity: 0.4;
+      transform: scale(0.95);
+      cursor: grabbing;
+    }
+
+    .card.drag-over {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+    }
+
+    .cards.drag-active .card:not(.dragging):hover {
+      transform: none;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* Drag handle */
+    .card-drag-handle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--arrow-color);
+      opacity: 0;
+      transition: opacity 0.15s;
+      cursor: grab;
+      z-index: 2;
+    }
+
+    .card:hover .card-drag-handle {
+      opacity: 1;
+    }
+
+    .card-drag-handle:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-secondary);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card-drag-handle:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .card-drag-handle svg {
+      width: 14px;
+      height: 14px;
+    }
+
     /* App view (iframe) */
     .app-view {
       position: absolute;
@@ -551,37 +611,7 @@
           <p class="title-sub">3 apps, one place.</p>
         </div>
 
-        <div class="cards">
-          <div class="card" onclick="openApp('cyberfortunegod', 'https://cyberfortunegod.vercel.app/', '赛博财神爷', 'icons/cyberfortunegod.png')">
-            <img class="card-icon" src="icons/cyberfortunegod.png" alt="赛博财神爷">
-            <div class="card-title">赛博财神爷</div>
-            <div class="card-desc">AI 智能记账，加拿大生活场景，夫妻共用</div>
-            <div class="card-bottom">
-              <span class="card-tag tag-finance">财务管理</span>
-              <span class="card-arrow">&#8599;</span>
-            </div>
-          </div>
-
-          <div class="card" onclick="openApp('postagent', 'https://post-agent-rho.vercel.app/', 'Post Agent', 'icons/postagent.png')">
-            <img class="card-icon" src="icons/postagent.png" alt="Post Agent">
-            <div class="card-title">Post Agent</div>
-            <div class="card-desc">社媒内容批量生成，自动排程，多平台发布</div>
-            <div class="card-bottom">
-              <span class="card-tag tag-social">社交媒体</span>
-              <span class="card-arrow">&#8599;</span>
-            </div>
-          </div>
-
-          <div class="card" onclick="openApp('soloceo', 'https://soloceo.github.io/solo-ceo/', 'Solo CEO', 'icons/soloceo.png')">
-            <img class="card-icon" src="icons/soloceo.png" alt="Solo CEO">
-            <div class="card-title">Solo CEO</div>
-            <div class="card-desc">独立创业者工作台，任务、客户、专注一体</div>
-            <div class="card-bottom">
-              <span class="card-tag tag-work">工作管理</span>
-              <span class="card-arrow">&#8599;</span>
-            </div>
-          </div>
-        </div>
+        <div class="cards" id="cardsGrid"></div>
 
         <div class="footer-section">
           <div class="footer-divider"></div>
@@ -609,11 +639,201 @@
     let currentUrl = '';
     let isAppOpen = false;
 
+    // App data
+    const appData = [
+      { id: 'cyberfortunegod', url: 'https://cyberfortunegod.vercel.app/', name: '赛博财神爷', icon: 'icons/cyberfortunegod.png', desc: 'AI 智能记账，加拿大生活场景，夫妻共用', tag: '财务管理', tagClass: 'tag-finance' },
+      { id: 'postagent', url: 'https://post-agent-rho.vercel.app/', name: 'Post Agent', icon: 'icons/postagent.png', desc: '社媒内容批量生成，自动排程，多平台发布', tag: '社交媒体', tagClass: 'tag-social' },
+      { id: 'soloceo', url: 'https://soloceo.github.io/solo-ceo/', name: 'Solo CEO', icon: 'icons/soloceo.png', desc: '独立创业者工作台，任务、客户、专注一体', tag: '工作管理', tagClass: 'tag-work' }
+    ];
+
+    function getOrder() {
+      try {
+        const saved = localStorage.getItem('toolbox-order');
+        if (saved) {
+          const order = JSON.parse(saved);
+          if (Array.isArray(order) && order.length === appData.length) return order;
+        }
+      } catch(e) {}
+      return appData.map(a => a.id);
+    }
+
+    function saveOrder(order) {
+      localStorage.setItem('toolbox-order', JSON.stringify(order));
+    }
+
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      const order = getOrder();
+      grid.innerHTML = '';
+
+      order.forEach(function(id) {
+        const app = appData.find(a => a.id === id);
+        if (!app) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.dataset.id = app.id;
+        card.innerHTML =
+          '<div class="card-drag-handle" title="拖拽排序">' +
+            '<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="3.5" r="1.2"/><circle cx="11" cy="3.5" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="5" cy="12.5" r="1.2"/><circle cx="11" cy="12.5" r="1.2"/></svg>' +
+          '</div>' +
+          '<img class="card-icon" src="' + app.icon + '" alt="' + app.name + '">' +
+          '<div class="card-title">' + app.name + '</div>' +
+          '<div class="card-desc">' + app.desc + '</div>' +
+          '<div class="card-bottom">' +
+            '<span class="card-tag ' + app.tagClass + '">' + app.tag + '</span>' +
+            '<span class="card-arrow">&#8599;</span>' +
+          '</div>';
+
+        // Click to open (but not when dragging)
+        let didDrag = false;
+        card.addEventListener('mousedown', function() { didDrag = false; });
+        card.addEventListener('mousemove', function() { didDrag = true; });
+        card.addEventListener('click', function(e) {
+          if (didDrag || e.target.closest('.card-drag-handle')) return;
+          openApp(app.id, app.url, app.name, app.icon);
+        });
+
+        // Drag events
+        card.addEventListener('dragstart', function(e) {
+          card.classList.add('dragging');
+          grid.classList.add('drag-active');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', app.id);
+        });
+
+        card.addEventListener('dragend', function() {
+          card.classList.remove('dragging');
+          grid.classList.remove('drag-active');
+          grid.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over'));
+        });
+
+        card.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          if (!card.classList.contains('dragging')) {
+            card.classList.add('drag-over');
+          }
+        });
+
+        card.addEventListener('dragleave', function() {
+          card.classList.remove('drag-over');
+        });
+
+        card.addEventListener('drop', function(e) {
+          e.preventDefault();
+          card.classList.remove('drag-over');
+          const fromId = e.dataTransfer.getData('text/plain');
+          const toId = app.id;
+          if (fromId === toId) return;
+
+          const order = getOrder();
+          const fromIdx = order.indexOf(fromId);
+          const toIdx = order.indexOf(toId);
+          order.splice(fromIdx, 1);
+          order.splice(toIdx, 0, fromId);
+          saveOrder(order);
+          renderCards();
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Touch drag support for mobile
+    (function() {
+      let dragEl = null, placeholder = null, startX, startY, offsetX, offsetY;
+
+      document.addEventListener('touchstart', function(e) {
+        const handle = e.target.closest('.card-drag-handle');
+        if (!handle) return;
+        dragEl = handle.closest('.card');
+        if (!dragEl) return;
+
+        const rect = dragEl.getBoundingClientRect();
+        const touch = e.touches[0];
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+        startX = touch.clientX;
+        startY = touch.clientY;
+
+        e.preventDefault();
+      }, { passive: false });
+
+      document.addEventListener('touchmove', function(e) {
+        if (!dragEl) return;
+        e.preventDefault();
+
+        const touch = e.touches[0];
+
+        if (!placeholder) {
+          if (Math.abs(touch.clientX - startX) + Math.abs(touch.clientY - startY) < 8) return;
+          placeholder = dragEl.cloneNode(true);
+          placeholder.style.opacity = '0.3';
+          placeholder.style.pointerEvents = 'none';
+          dragEl.parentNode.insertBefore(placeholder, dragEl);
+
+          dragEl.style.position = 'fixed';
+          dragEl.style.zIndex = '1000';
+          dragEl.style.width = dragEl.offsetWidth + 'px';
+          dragEl.style.margin = '0';
+          dragEl.style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)';
+          dragEl.style.transform = 'scale(1.04)';
+        }
+
+        dragEl.style.left = (touch.clientX - offsetX) + 'px';
+        dragEl.style.top = (touch.clientY - offsetY) + 'px';
+
+        const grid = document.getElementById('cardsGrid');
+        const cards = Array.from(grid.querySelectorAll('.card')).filter(c => c !== dragEl);
+        cards.forEach(c => c.classList.remove('drag-over'));
+
+        const over = document.elementFromPoint(touch.clientX, touch.clientY);
+        const overCard = over ? over.closest('.card') : null;
+        if (overCard && overCard !== dragEl && overCard !== placeholder) {
+          overCard.classList.add('drag-over');
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', function() {
+        if (!dragEl) return;
+
+        const grid = document.getElementById('cardsGrid');
+        const overCard = grid.querySelector('.card.drag-over');
+
+        if (overCard && placeholder) {
+          const fromId = dragEl.dataset.id;
+          const toId = overCard.dataset.id;
+          const order = getOrder();
+          const fromIdx = order.indexOf(fromId);
+          const toIdx = order.indexOf(toId);
+          order.splice(fromIdx, 1);
+          order.splice(toIdx, 0, fromId);
+          saveOrder(order);
+        }
+
+        // Clean up
+        dragEl.style.position = '';
+        dragEl.style.zIndex = '';
+        dragEl.style.width = '';
+        dragEl.style.left = '';
+        dragEl.style.top = '';
+        dragEl.style.margin = '';
+        dragEl.style.boxShadow = '';
+        dragEl.style.transform = '';
+        if (placeholder) placeholder.remove();
+        placeholder = null;
+        dragEl = null;
+
+        renderCards();
+      });
+    })();
+
     function openApp(id, url, name, icon) {
       currentUrl = url;
       isAppOpen = true;
 
-      // Update header
       document.getElementById('headerLogo').style.display = 'none';
       document.getElementById('backBtn').style.display = 'flex';
       document.getElementById('headerCenter').style.display = 'flex';
@@ -622,26 +842,18 @@
       document.getElementById('headerAppIcon').src = icon;
       document.getElementById('headerAppName').textContent = name;
 
-      // Show app view
       document.getElementById('homeView').classList.add('hidden');
       document.getElementById('appView').classList.add('active');
 
-      // Show loading
       const loading = document.getElementById('appLoading');
       loading.classList.remove('hidden');
       document.getElementById('loadingText').textContent = name;
 
-      // Load iframe
       const frame = document.getElementById('appFrame');
       frame.src = url;
-      frame.onload = function() {
-        loading.classList.add('hidden');
-      };
+      frame.onload = function() { loading.classList.add('hidden'); };
 
-      // Update title
-      document.title = name + ' — Toolbox';
-
-      // Push state for browser back
+      document.title = name + ' \u2014 Toolbox';
       history.pushState({ app: id, url, name, icon }, '', '#' + id);
     }
 
@@ -650,44 +862,28 @@
       isAppOpen = false;
       currentUrl = '';
 
-      // Update header
       document.getElementById('headerLogo').style.display = 'flex';
       document.getElementById('backBtn').style.display = 'none';
       document.getElementById('headerCenter').style.display = 'none';
       document.getElementById('externalBtn').style.display = 'none';
       document.getElementById('escHint').style.display = 'none';
 
-      // Show home view
       document.getElementById('homeView').classList.remove('hidden');
       document.getElementById('appView').classList.remove('active');
-
-      // Unload iframe
       document.getElementById('appFrame').src = 'about:blank';
 
-      // Update title
       document.title = 'Toolbox \u2014 Aiven\'s Workspace';
-
-      // Update URL
-      if (location.hash) {
-        history.pushState({}, '', location.pathname);
-      }
+      if (location.hash) history.pushState({}, '', location.pathname);
     }
 
     function openExternal() {
-      if (currentUrl) {
-        window.open(currentUrl, '_blank');
-      }
+      if (currentUrl) window.open(currentUrl, '_blank');
     }
 
-    // ESC key to go home
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && isAppOpen) {
-        e.preventDefault();
-        goHome();
-      }
+      if (e.key === 'Escape' && isAppOpen) { e.preventDefault(); goHome(); }
     });
 
-    // Handle browser back/forward
     window.addEventListener('popstate', function(e) {
       if (e.state && e.state.app) {
         openApp(e.state.app, e.state.url, e.state.name, e.state.icon);
@@ -697,19 +893,12 @@
       }
     });
 
-    // Handle initial hash on page load
     window.addEventListener('DOMContentLoaded', function() {
+      renderCards();
       const hash = location.hash.slice(1);
       if (hash) {
-        const appMap = {
-          cyberfortunegod: { url: 'https://cyberfortunegod.vercel.app/', name: '赛博财神爷', icon: 'icons/cyberfortunegod.png' },
-          postagent: { url: 'https://post-agent-rho.vercel.app/', name: 'Post Agent', icon: 'icons/postagent.png' },
-          soloceo: { url: 'https://soloceo.github.io/solo-ceo/', name: 'Solo CEO', icon: 'icons/soloceo.png' }
-        };
-        if (appMap[hash]) {
-          const app = appMap[hash];
-          openApp(hash, app.url, app.name, app.icon);
-        }
+        const app = appData.find(a => a.id === hash);
+        if (app) openApp(app.id, app.url, app.name, app.icon);
       }
     });
   </script>
