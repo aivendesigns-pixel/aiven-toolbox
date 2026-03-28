@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Toolbox — Aiven's Workspace</title>
   <link rel="icon" href="icons/toolbox.png">
+  <link rel="apple-touch-icon" href="icons/toolbox-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Toolbox">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -915,6 +921,11 @@
       if (hash) {
         const app = appData.find(a => a.id === hash);
         if (app) openApp(app.id, app.url, app.name, app.icon);
+      }
+
+      // Register Service Worker for PWA install
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function() {});
       }
     });
   </script>

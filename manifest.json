@@ -1,0 +1,24 @@
+{
+  "name": "Toolbox — Aiven's Workspace",
+  "short_name": "Toolbox",
+  "description": "3 apps, one place.",
+  "start_url": "/aiven-toolbox/",
+  "scope": "/aiven-toolbox/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icons/toolbox.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/toolbox-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
