@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolbox — Aiven's Workspace</title>
+  <link rel="icon" href="icons/toolbox.png">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --header-bg: #ffffff;
+      --text: #1d1d1f;
+      --text-secondary: #86868b;
+      --card-bg: #ffffff;
+      --card-border: rgba(0, 0, 0, 0.08);
+      --card-border-hover: rgba(0, 0, 0, 0.18);
+      --divider: rgba(0, 0, 0, 0.1);
+      --arrow-color: #86868b;
+      --arrow-hover: #1d1d1f;
+      --tag-finance-bg: #FFF3CD;
+      --tag-finance-text: #7A5800;
+      --tag-social-bg: #D1FAE5;
+      --tag-social-text: #065F46;
+      --tag-work-bg: #EDE9FE;
+      --tag-work-text: #4C1D95;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --header-bg: #000000;
+        --text: #f5f5f7;
+        --text-secondary: #86868b;
+        --card-bg: #1C1C1E;
+        --card-border: rgba(255, 255, 255, 0.1);
+        --card-border-hover: rgba(255, 255, 255, 0.25);
+        --divider: rgba(255, 255, 255, 0.1);
+        --arrow-color: #86868b;
+        --arrow-hover: #f5f5f7;
+        --tag-finance-bg: #3A2E00;
+        --tag-finance-text: #FFC940;
+        --tag-social-bg: #003320;
+        --tag-social-text: #6EE7A0;
+        --tag-work-bg: #1E1040;
+        --tag-work-text: #C4B5FD;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Header */
+    header {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      background: var(--header-bg);
+      border-bottom: 0.5px solid var(--divider);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-logo img {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+    }
+
+    .header-logo span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Main */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+
+    /* Title section */
+    .title-section {
+      margin-bottom: 48px;
+    }
+
+    .title-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .title-main {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .title-sub {
+      font-size: 17px;
+      color: var(--text-secondary);
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .card:active {
+      transform: scale(0.98);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 13px;
+      object-fit: cover;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .tag-finance {
+      background: var(--tag-finance-bg);
+      color: var(--tag-finance-text);
+    }
+
+    .tag-social {
+      background: var(--tag-social-bg);
+      color: var(--tag-social-text);
+    }
+
+    .tag-work {
+      background: var(--tag-work-bg);
+      color: var(--tag-work-text);
+    }
+
+    .card-arrow {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      font-size: 16px;
+      color: var(--arrow-color);
+      transition: transform 0.18s ease, color 0.18s ease;
+    }
+
+    .card:hover .card-arrow {
+      transform: translate(2px, -2px);
+      color: var(--arrow-hover);
+    }
+
+    /* Footer */
+    footer {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    .footer-divider {
+      height: 0.5px;
+      background: var(--divider);
+      margin-bottom: 16px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #30D158;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .title-main {
+        font-size: 36px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <img src="icons/toolbox.png" alt="Toolbox">
+      <span>Toolbox</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="title-section">
+      <p class="title-label">Aiven's Workspace</p>
+      <h1 class="title-main">Toolbox</h1>
+      <p class="title-sub">3 apps, one place.</p>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="https://cyberfortunegod.vercel.app/" target="_blank" rel="noopener">
+        <img class="card-icon" src="icons/cyberfortunegod.png" alt="赛博财神爷">
+        <div class="card-title">赛博财神爷</div>
+        <div class="card-desc">AI 智能记账，加拿大生活场景，夫妻共用</div>
+        <span class="card-tag tag-finance">财务管理</span>
+        <span class="card-arrow">&#8599;</span>
+      </a>
+
+      <a class="card" href="https://post-agent-rho.vercel.app/" target="_blank" rel="noopener">
+        <img class="card-icon" src="icons/postagent.png" alt="Post Agent">
+        <div class="card-title">Post Agent</div>
+        <div class="card-desc">社媒内容批量生成，自动排程，多平台发布</div>
+        <span class="card-tag tag-social">社交媒体</span>
+        <span class="card-arrow">&#8599;</span>
+      </a>
+
+      <a class="card" href="https://soloceo.github.io/solo-ceo/" target="_blank" rel="noopener">
+        <img class="card-icon" src="icons/soloceo.png" alt="Solo CEO">
+        <div class="card-title">Solo CEO</div>
+        <div class="card-desc">独立创业者工作台，任务、客户、专注一体</div>
+        <span class="card-tag tag-work">工作管理</span>
+        <span class="card-arrow">&#8599;</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-divider"></div>
+    <div class="footer-content">
+      <div class="footer-status">
+        <span class="status-dot"></span>
+        <span>3 tools running</span>
+      </div>
+      <div>各 app 独立部署 · 更新自动同步</div>
+    </div>
+  </footer>
+</body>
+</html>
