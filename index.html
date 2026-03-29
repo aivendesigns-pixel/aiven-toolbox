@@ -114,10 +114,7 @@
     }
 
     .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
+      display: none !important;
     }
 
     .header-logo img {
@@ -187,6 +184,7 @@
       gap: 6px;
       font-size: 12px;
       color: var(--esc-text);
+      cursor: pointer;
     }
 
     .esc-key {
@@ -631,17 +629,12 @@
 <body>
   <header>
     <div class="header-left">
-      <button class="header-back" id="backBtn" onclick="goHome()">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10 3L5 8l5 5"/>
-        </svg>
-        Toolbox
-      </button>
-
-      <div class="header-logo" id="headerLogo" onclick="goHome()">
-        <img src="icons/toolbox.png" alt="Toolbox">
-        <span>Toolbox</span>
+      <div class="esc-hint" id="escHint" onclick="goHome()">
+        <kbd class="esc-key">esc</kbd>
+        <span>返回</span>
       </div>
+
+      <div class="header-logo" id="headerLogo" onclick="goHome()" style="display:none;"></div>
     </div>
 
     <div class="header-center" id="headerCenter">
@@ -650,10 +643,6 @@
     </div>
 
     <div class="header-right">
-      <div class="esc-hint" id="escHint">
-        <kbd class="esc-key">esc</kbd>
-        <span>返回</span>
-      </div>
 
       <button class="header-external" id="externalBtn" onclick="openExternal()" title="在新标签页中打开">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -683,7 +672,7 @@
               <span class="status-dot"></span>
               <span>4 tools running</span>
             </div>
-            <div>各 app 独立部署 · 更新自动同步 · v1.0.1</div>
+            <div>各 app 独立部署 · 更新自动同步 · v1.0.2</div>
           </div>
         </div>
       </div>
@@ -900,10 +889,9 @@
       isAppOpen = true;
 
       document.getElementById('headerLogo').style.display = 'none';
-      document.getElementById('backBtn').style.display = 'flex';
+      document.getElementById('escHint').style.display = 'flex';
       document.getElementById('headerCenter').style.display = 'flex';
       document.getElementById('externalBtn').style.display = 'flex';
-      document.getElementById('escHint').style.display = 'flex';
       document.getElementById('headerAppIcon').src = icon;
       document.getElementById('headerAppName').textContent = name;
 
@@ -934,11 +922,9 @@
       isAppOpen = false;
       currentUrl = '';
 
-      document.getElementById('headerLogo').style.display = 'flex';
-      document.getElementById('backBtn').style.display = 'none';
+      document.getElementById('escHint').style.display = 'none';
       document.getElementById('headerCenter').style.display = 'none';
       document.getElementById('externalBtn').style.display = 'none';
-      document.getElementById('escHint').style.display = 'none';
 
       document.getElementById('homeView').classList.remove('hidden');
       document.getElementById('appView').classList.remove('active');
