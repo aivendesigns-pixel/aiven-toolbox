@@ -1,7 +1,7 @@
 {
   "name": "Toolbox — Aiven's Workspace",
   "short_name": "Toolbox",
-  "description": "3 apps, one place.",
+  "description": "4 apps, one place.",
   "start_url": "/aiven-toolbox/",
   "scope": "/aiven-toolbox/",
   "display": "standalone",
