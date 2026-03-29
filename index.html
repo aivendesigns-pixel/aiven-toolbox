@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Toolbox — Aiven's Workspace</title>
+  <title>ToolBox — Aiven's Workspace</title>
   <link rel="icon" href="icons/toolbox.png">
   <link rel="apple-touch-icon" href="icons/toolbox-192.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Toolbox">
+  <meta name="apple-mobile-web-app-title" content="ToolBox">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -115,44 +115,6 @@
 
     .header-logo {
       display: none !important;
-    }
-
-    .header-logo img {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-    }
-
-    .header-logo span {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    /* Back button */
-    .header-back {
-      display: none;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #007AFF;
-      cursor: pointer;
-      border: none;
-      background: none;
-      padding: 6px 10px 6px 6px;
-      border-radius: 8px;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-
-    .header-back:hover {
-      background: rgba(0, 122, 255, 0.08);
-    }
-
-    .header-back svg {
-      width: 18px;
-      height: 18px;
     }
 
     /* App title in header - centered */
@@ -659,8 +621,8 @@
       <div class="home-inner">
         <div class="title-section">
           <p class="title-label">Aiven's Workspace</p>
-          <h1 class="title-main">Toolbox</h1>
-          <p class="title-sub">4 apps, one place.</p>
+          <h1 class="title-main">ToolBox</h1>
+          <p class="title-sub" id="titleSub">4 apps, one place.</p>
         </div>
 
         <div class="cards" id="cardsGrid"></div>
@@ -670,9 +632,9 @@
           <div class="footer-content">
             <div class="footer-status">
               <span class="status-dot"></span>
-              <span>4 tools running</span>
+              <span id="footerCount">4 tools ready</span>
             </div>
-            <div>各 app 独立部署 · 更新自动同步 · v1.0.3</div>
+            <div>各 app 独立部署 · 更新自动同步 · v1.1.0</div>
           </div>
         </div>
       </div>
@@ -911,7 +873,7 @@
       }
       frame.onload = function() { loading.classList.add('hidden'); };
 
-      document.title = name + ' \u2014 Toolbox';
+      document.title = name + ' \u2014 ToolBox';
       if (!fromPopstate) {
         history.pushState({ app: id, url, name, icon }, '', '#' + id);
       }
@@ -930,7 +892,7 @@
       document.getElementById('appView').classList.remove('active');
       document.getElementById('appFrame').src = 'about:blank';
 
-      document.title = 'Toolbox \u2014 Aiven\'s Workspace';
+      document.title = 'ToolBox \u2014 Aiven\'s Workspace';
       if (!fromPopstate && location.hash) {
         history.back();
       }
@@ -974,6 +936,10 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       renderCards();
+      // Sync counts with appData
+      var count = appData.length;
+      document.getElementById('titleSub').textContent = count + ' apps, one place.';
+      document.getElementById('footerCount').textContent = count + ' tools ready';
       const hash = location.hash.slice(1);
       if (hash) {
         const app = appData.find(a => a.id === hash);

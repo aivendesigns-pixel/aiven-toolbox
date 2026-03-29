@@ -1,6 +1,6 @@
 {
-  "name": "Toolbox — Aiven's Workspace",
-  "short_name": "Toolbox",
+  "name": "ToolBox — Aiven's Workspace",
+  "short_name": "ToolBox",
   "description": "4 apps, one place.",
   "start_url": "/aiven-toolbox/",
   "scope": "/aiven-toolbox/",
@@ -12,13 +12,25 @@
       "src": "icons/toolbox.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/toolbox.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icons/toolbox-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/toolbox-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

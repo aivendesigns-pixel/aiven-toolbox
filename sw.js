@@ -1,9 +1,11 @@
-const CACHE_NAME = 'toolbox-v5';
+const CACHE_NAME = 'toolbox-v6';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icons/toolbox.png',
+  './icons/toolbox-192.png',
+  './icons/toolbox-512.png',
   './icons/cyberfortunegod.png',
   './icons/postagent.png',
   './icons/soloceo.png',
