@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolbox-v1';
+const CACHE_NAME = 'toolbox-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,8 @@ const ASSETS = [
   './icons/toolbox.png',
   './icons/cyberfortunegod.png',
   './icons/postagent.png',
-  './icons/soloceo.png'
+  './icons/soloceo.png',
+  './icons/justdoit.png'
 ];
 
 self.addEventListener('install', function(e) {

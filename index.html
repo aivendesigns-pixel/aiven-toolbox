@@ -37,6 +37,8 @@
       --tag-social-text: #065F46;
       --tag-work-bg: #EDE9FE;
       --tag-work-text: #4C1D95;
+      --tag-task-bg: #FEE2E2;
+      --tag-task-text: #991B1B;
       --esc-bg: rgba(0, 0, 0, 0.06);
       --esc-text: #86868b;
     }
@@ -61,6 +63,8 @@
         --tag-social-text: #6EE7A0;
         --tag-work-bg: #1E1040;
         --tag-work-text: #C4B5FD;
+        --tag-task-bg: #400E0E;
+        --tag-task-text: #FCA5A5;
         --esc-bg: rgba(255, 255, 255, 0.1);
         --esc-text: #86868b;
       }
@@ -376,6 +380,11 @@
       color: var(--tag-work-text);
     }
 
+    .tag-task {
+      background: var(--tag-task-bg);
+      color: var(--tag-task-text);
+    }
+
     .card-arrow {
       font-size: 15px;
       color: var(--arrow-color);
@@ -614,7 +623,7 @@
         <div class="title-section">
           <p class="title-label">Aiven's Workspace</p>
           <h1 class="title-main">Toolbox</h1>
-          <p class="title-sub">3 apps, one place.</p>
+          <p class="title-sub">4 apps, one place.</p>
         </div>
 
         <div class="cards" id="cardsGrid"></div>
@@ -624,7 +633,7 @@
           <div class="footer-content">
             <div class="footer-status">
               <span class="status-dot"></span>
-              <span>3 tools running</span>
+              <span>4 tools running</span>
             </div>
             <div>各 app 独立部署 · 更新自动同步</div>
           </div>
@@ -649,7 +658,8 @@
     const appData = [
       { id: 'cyberfortunegod', url: 'https://cyberfortunegod.vercel.app/', name: '赛博财神爷', icon: 'icons/cyberfortunegod.png', desc: 'AI 智能记账，加拿大生活场景，夫妻共用', tag: '财务管理', tagClass: 'tag-finance' },
       { id: 'postagent', url: 'https://post-agent-rho.vercel.app/', name: 'Post Agent', icon: 'icons/postagent.png', desc: '社媒内容批量生成，自动排程，多平台发布', tag: '社交媒体', tagClass: 'tag-social' },
-      { id: 'soloceo', url: 'https://soloceo.github.io/solo-ceo/', name: 'Solo CEO', icon: 'icons/soloceo.png', desc: '独立创业者工作台，任务、客户、专注一体', tag: '工作管理', tagClass: 'tag-work' }
+      { id: 'soloceo', url: 'https://soloceo.github.io/solo-ceo/', name: 'Solo CEO', icon: 'icons/soloceo.png', desc: '独立创业者工作台，任务、客户、专注一体', tag: '工作管理', tagClass: 'tag-work' },
+      { id: 'justdoit', url: 'https://just-do-it-snowy.vercel.app/', name: '干TM的', icon: 'icons/justdoit.png', desc: '任务看板，拖拽管理，专注执行', tag: '任务管理', tagClass: 'tag-task' }
     ];
 
     function getOrder() {
