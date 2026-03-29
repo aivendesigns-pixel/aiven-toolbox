@@ -915,7 +915,12 @@
       document.getElementById('loadingText').textContent = name;
 
       const frame = document.getElementById('appFrame');
-      frame.src = url;
+      // Use location.replace to avoid adding iframe history entries
+      try {
+        frame.contentWindow.location.replace(url);
+      } catch(e) {
+        frame.src = url;
+      }
       frame.onload = function() { loading.classList.add('hidden'); };
 
       document.title = name + ' \u2014 Toolbox';
@@ -970,10 +975,14 @@
     });
 
     window.addEventListener('popstate', function(e) {
-      if (e.state && e.state.app) {
+      if (isAppOpen) {
+        // Any back navigation while app is open → go home
+        goHome(true);
+        if (location.hash) {
+          history.replaceState({}, '', location.pathname);
+        }
+      } else if (e.state && e.state.app) {
         openApp(e.state.app, e.state.url, e.state.name, e.state.icon, true);
-      } else {
-        if (isAppOpen) goHome(true);
       }
     });
 
