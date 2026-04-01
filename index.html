@@ -600,9 +600,55 @@
         display: none !important;
       }
     }
+
+    /* Update toast */
+    .update-toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card-bg);
+      border: 0.5px solid var(--divider);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .update-toast.show {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+    }
+
+    .update-toast button {
+      background: #007AFF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .update-toast button:active {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
+  <!-- Update toast -->
+  <div class="update-toast" id="updateToast">
+    <span>新版本已就绪</span>
+    <button onclick="applyUpdate()">立即更新</button>
+  </div>
+
   <header>
     <div class="header-left">
       <div class="esc-hint" id="escHint" onclick="goHome()">
@@ -961,9 +1007,34 @@
         if (app) openApp(app.id, app.url, app.name, app.icon);
       }
 
-      // Register Service Worker for PWA install
+      // Register Service Worker & detect updates
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(function() {});
+        var waitingSW = null;
+
+        navigator.serviceWorker.register('sw.js').then(function(reg) {
+          // Check for updates on load
+          reg.addEventListener('updatefound', function() {
+            var newSW = reg.installing;
+            newSW.addEventListener('statechange', function() {
+              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                // New version available
+                waitingSW = newSW;
+                document.getElementById('updateToast').classList.add('show');
+              }
+            });
+          });
+        }).catch(function() {});
+
+        // Reload when new SW takes over
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          window.location.reload();
+        });
+
+        window.applyUpdate = function() {
+          if (waitingSW) {
+            waitingSW.postMessage('skipWaiting');
+          }
+        };
       }
     });
   </script>
