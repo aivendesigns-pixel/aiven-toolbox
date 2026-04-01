@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolbox-v12';
+const CACHE_NAME = 'toolbox-v13';
 const ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,8 @@ const ASSETS = [
   './icons/postagent.png',
   './icons/soloceo.png',
   './icons/justdoit.png',
-  './icons/rbgtracker.png'
+  './icons/rbgtracker.png',
+  './icons/aicounter.png'
 ];
 
 self.addEventListener('install', function(e) {
@@ -48,7 +49,7 @@ self.addEventListener('message', function(e) {
 
 self.addEventListener('fetch', function(e) {
   // Don't cache iframe app requests (cross-origin)
-  if (e.request.url.includes('vercel.app') || e.request.url.includes('github.io/solo-ceo')) {
+  if (e.request.url.includes('vercel.app') || e.request.url.includes('github.io/')) {
     return;
   }
 
