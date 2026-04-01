@@ -30,17 +30,6 @@
       --card-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
       --divider: rgba(0, 0, 0, 0.08);
       --arrow-color: #c7c7cc;
-      --arrow-hover: #1d1d1f;
-      --tag-finance-bg: #FFF3CD;
-      --tag-finance-text: #7A5800;
-      --tag-social-bg: #D1FAE5;
-      --tag-social-text: #065F46;
-      --tag-work-bg: #EDE9FE;
-      --tag-work-text: #4C1D95;
-      --tag-task-bg: #FEE2E2;
-      --tag-task-text: #991B1B;
-      --tag-biz-bg: #DBEAFE;
-      --tag-biz-text: #1E40AF;
       --esc-bg: rgba(0, 0, 0, 0.06);
       --esc-text: #86868b;
     }
@@ -58,17 +47,6 @@
         --card-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
         --divider: rgba(255, 255, 255, 0.08);
         --arrow-color: #48484a;
-        --arrow-hover: #f5f5f7;
-        --tag-finance-bg: #3A2E00;
-        --tag-finance-text: #FFC940;
-        --tag-social-bg: #003320;
-        --tag-social-text: #6EE7A0;
-        --tag-work-bg: #1E1040;
-        --tag-work-text: #C4B5FD;
-        --tag-task-bg: #400E0E;
-        --tag-task-text: #FCA5A5;
-        --tag-biz-bg: #1E2A4A;
-        --tag-biz-text: #93C5FD;
         --esc-bg: rgba(255, 255, 255, 0.1);
         --esc-text: #86868b;
       }
@@ -229,28 +207,23 @@
 
     /* Title section */
     .title-section {
-      margin-bottom: 52px;
+      margin-bottom: 48px;
     }
 
     .title-label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 10px;
+      display: none;
     }
 
     .title-main {
-      font-size: 52px;
+      font-size: 42px;
       font-weight: 700;
       letter-spacing: -0.035em;
       line-height: 1.05;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .title-sub {
-      font-size: 18px;
+      font-size: 16px;
       color: var(--text-secondary);
       font-weight: 400;
     }
@@ -270,18 +243,17 @@
       padding: 22px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
+      border-radius: 16px;
       text-decoration: none;
       color: var(--text);
       cursor: pointer;
-      box-shadow: var(--card-shadow);
       transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1),
                   border-color 0.22s ease,
                   box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1);
     }
 
     .card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       border-color: var(--card-border-hover);
       box-shadow: var(--card-shadow-hover);
     }
@@ -310,59 +282,7 @@
       font-size: 13px;
       color: var(--text-secondary);
       line-height: 1.5;
-      margin-bottom: 20px;
       flex: 1;
-    }
-
-    .card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.01em;
-    }
-
-    .tag-finance {
-      background: var(--tag-finance-bg);
-      color: var(--tag-finance-text);
-    }
-
-    .tag-social {
-      background: var(--tag-social-bg);
-      color: var(--tag-social-text);
-    }
-
-    .tag-work {
-      background: var(--tag-work-bg);
-      color: var(--tag-work-text);
-    }
-
-    .tag-task {
-      background: var(--tag-task-bg);
-      color: var(--tag-task-text);
-    }
-
-    .tag-biz {
-      background: var(--tag-biz-bg);
-      color: var(--tag-biz-text);
-    }
-
-    .card-arrow {
-      font-size: 15px;
-      color: var(--arrow-color);
-      transition: transform 0.22s ease, color 0.22s ease;
-    }
-
-    .card:hover .card-arrow {
-      transform: translate(2px, -2px);
-      color: var(--arrow-hover);
     }
 
     /* Drag and drop */
@@ -485,32 +405,11 @@
       width: 100%;
     }
 
-    .footer-divider {
-      height: 0.5px;
-      background: var(--divider);
-      margin-bottom: 16px;
-    }
-
     .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
+      text-align: center;
+      font-size: 12px;
       color: var(--text-secondary);
-    }
-
-    .footer-status {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background: #30D158;
-      border-radius: 50%;
-      flex-shrink: 0;
+      opacity: 0.5;
     }
 
     @media (max-width: 480px) {
@@ -531,64 +430,46 @@
       }
 
       .cards {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 8px;
       }
 
       .card {
-        padding: 14px;
-        aspect-ratio: 1;
-        justify-content: space-between;
-        border-radius: 16px;
+        padding: 16px;
+        border-radius: 14px;
+        align-items: center;
+        flex-direction: row;
+        gap: 12px;
       }
 
       .card-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        margin-bottom: 10px;
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        margin-bottom: 0;
+        flex-shrink: 0;
       }
 
       .card-title {
         font-size: 15px;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
 
       .card-desc {
         font-size: 11px;
-        line-height: 1.4;
-        margin-bottom: 10px;
+        line-height: 1.3;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
 
-      .card-tag {
-        font-size: 10px;
-        padding: 3px 8px;
-      }
-
-      .card-arrow {
-        font-size: 13px;
-      }
-
       .card-drag-handle {
-        opacity: 0.5;
-        top: 6px;
-        right: 6px;
-        width: 24px;
-        height: 24px;
+        display: none;
       }
 
       .header-center {
         display: none !important;
-      }
-
-      .footer-content {
-        flex-direction: column;
-        gap: 6px;
-        align-items: flex-start;
       }
 
       .esc-hint {
@@ -688,13 +569,8 @@
         <div class="cards" id="cardsGrid"></div>
 
         <div class="footer-section">
-          <div class="footer-divider"></div>
           <div class="footer-content">
-            <div class="footer-status">
-              <span class="status-dot"></span>
-              <span id="footerCount">4 tools ready</span>
-            </div>
-            <div>各 app 独立部署 · 更新自动同步 · v1.3.1</div>
+            <span>v1.4.0</span>
           </div>
         </div>
       </div>
@@ -755,11 +631,7 @@
           '</div>' +
           '<img class="card-icon" src="' + app.icon + '" alt="' + app.name + '">' +
           '<div class="card-title">' + app.name + '</div>' +
-          '<div class="card-desc">' + app.desc + '</div>' +
-          '<div class="card-bottom">' +
-            '<span class="card-tag ' + app.tagClass + '">' + app.tag + '</span>' +
-            '<span class="card-arrow">&#8599;</span>' +
-          '</div>';
+          '<div class="card-desc">' + app.desc + '</div>';
 
         // Click to open
         card.addEventListener('click', function(e) {
@@ -997,10 +869,8 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       renderCards();
-      // Sync counts with appData
-      var count = appData.length;
-      document.getElementById('titleSub').textContent = count + ' apps, one place.';
-      document.getElementById('footerCount').textContent = count + ' tools ready';
+      // Sync count with appData
+      document.getElementById('titleSub').textContent = appData.length + ' apps, one place.';
       const hash = location.hash.slice(1);
       if (hash) {
         const app = appData.find(a => a.id === hash);

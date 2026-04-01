@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolbox-v10';
+const CACHE_NAME = 'toolbox-v11';
 const ASSETS = [
   './',
   './index.html',
