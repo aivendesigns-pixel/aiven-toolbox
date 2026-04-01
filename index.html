@@ -594,6 +594,11 @@
       .esc-hint {
         display: none !important;
       }
+
+      /* Hide header on mobile when app is open */
+      body:has(#appView.active) header {
+        display: none !important;
+      }
     }
   </style>
 </head>
