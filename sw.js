@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolbox-v8';
+const CACHE_NAME = 'toolbox-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -16,7 +16,14 @@ const ASSETS = [
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(ASSETS);
+      // Bypass browser/CDN cache to get fresh files
+      return Promise.all(
+        ASSETS.map(function(url) {
+          return fetch(url, { cache: 'no-cache' }).then(function(resp) {
+            return cache.put(url, resp);
+          });
+        })
+      );
     })
   );
 });
